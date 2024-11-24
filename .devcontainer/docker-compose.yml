@@ -1,0 +1,38 @@
+version: '3.8'
+
+# データベースのデータを保存しておくたのめのvolume定義
+volumes:
+  springboot-app-data:
+
+services:
+  app:
+    container_name: springboot-app
+    build: . # Dockerfileのパスを指定
+    # ttyとstdin_openはコンテナを起動させておくための設定
+    tty: true
+    stdin_open: true
+    volumes:
+      - ..:/workspaces:cached
+    environment:
+      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in db container
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOSTNAME: springboot-db
+
+  # データベースはPostgreSQLを私用
+  db:
+    container_name: springboot-db
+    image: postgres:latest
+    # データベースのデータを保存しておくたのめのvolume定義
+    volumes:
+      - springboot-app-data:/var/lib/postgresql/data
+    environment:
+      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in app container
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      TZ: 'Asia/Tokyo'
+    # 外部ツールからメンテナンスするために接続用ポート番号を指定
+    ports:
+      - 5432:5432

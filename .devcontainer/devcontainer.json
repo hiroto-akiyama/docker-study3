@@ -1,0 +1,14 @@
+{
+  "name": "Java(SpringBoot) Development Environment",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
+}
